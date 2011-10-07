@@ -14,6 +14,9 @@ directory as JSON files. It uses the googles JSON api as opposed to the XML api.
 	spreadsheet_id = '0Amfbd9df0sdflkewsd09dsfkl328sdf02'
 	target_dir = '/tmp/translations'
 	file_name = 'text_ids.json'
+	
+	# the keys define the column headers in the spreadsheet
+	# the values define the name of the folder for a given language
 	languages = {
 	  :english => 'en',
 	  :german => 'de',
@@ -32,6 +35,34 @@ directory as JSON files. It uses the googles JSON api as opposed to the XML api.
       :fallback_language => :english
 	}).run
 
-## How to find the google spreadsheet id
+## Output format
 
-To be described
+For now it only supports JSON
+
+	{
+		"sun_intro_step2"=>"Build another one…",
+		"sun_intro_step3"=>"... and another one."
+	}
+
+## Output structure
+
+	target_dir
+		- en
+			- text_ids.json
+		- fr
+			- text_ids.json
+
+## Requirements
+
+### A google spreadsheet
+
+For now it needs to have a certain format. Check the [demo document](https://docs.google.com/spreadsheet/ccc?key=0Auo5c2PWMqR4dHlOSjlXcjY0X01udzNPdHlKZ09QTVE&hl=en_US). You have several sheets in one document
+
+
+### A google spreadsheet id
+
+1. Create a spreadsheet on google docs
+2. Click on File -> Publish To The Web
+3. Check 'Automatically republish when changes are made'
+4. Find the spreadsheet id in the generated link. It is marked with 'key='. In the following url, the key would be '0Auo5c2PWMqR4dHlOSjlXcjY0X01udzNPdHlKZ09QTVE': https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=0Auo5c2PWMqR4dHlOSjlXcjY0X01udzNPdHlKZ09QTVE&output=html
+5. Click on the close button
