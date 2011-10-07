@@ -1,4 +1,5 @@
 require "urbane/version"
+require "urbane/vendor/ordered_hash"
 require "json"
 require "open-uri"
 
@@ -40,7 +41,7 @@ module Urbane
     end
 
     def sorted_hash_for_language(language)
-      @text_ids[language].sort.inject({}) do |sorted_hash, translation|
+      @text_ids[language].sort.inject(Urbane::ActiveSupport::OrderedHash.new) do |sorted_hash, translation|
         sorted_hash[translation[0]] = translation[1]
         sorted_hash
       end
