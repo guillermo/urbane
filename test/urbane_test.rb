@@ -18,11 +18,25 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
       FakeWeb.register_uri(:get,
         "http://spreadsheets.google.com/feeds/list/0AmfBdooXTXfQdHBRRkstNlJsdkpkaVVUdU5JTm1RZmc/od6/public/values?alt=json",
         :body => response)
-    @generator = Urbane::Generator.new(
-                                                "http://spreadsheets.google.com/feeds/worksheets/0AmfBdooXTXfQdHBRRkstNlJsdkpkaVVUdU5JTm1RZmc/public/values/?alt=json",
-                                                TARGET_DIR,
-                                                'text_ids.json')
-    @generator.run
+
+
+      @options = {
+        :spreadsheet_id => '0AmfBdooXTXfQdHBRRkstNlJsdkpkaVVUdU5JTm1RZmc',
+        :target_dir => TARGET_DIR,
+        :file_name => 'text_ids.json',
+        :languages => {
+          :english => 'en',
+          :german => 'de',
+          :french => 'fr',
+          :italian => 'it',
+          :turkish => 'tr',
+          :spanish => 'es',
+          :portuguese => 'pt'
+        },
+        :fallback_language => :english
+      }
+      @generator = Urbane::Generator.new(@options)
+      @generator.run
     end
 
     teardown do
@@ -30,7 +44,7 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
     end
 
     should 'create a folder and a document for each locale' do
-      ['en', 'de', 'fr', 'it', 'tr', 'es'].each do |locale|
+      @options[:languages].values.each do |locale|
         expected_file = File.join(TARGET_DIR, locale,'text_ids.json')
         assert File.exists?(expected_file), "file #{expected_file} should exist"
       end
@@ -41,7 +55,7 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
       assert_equal Hash,info_hash_us['text_ids'].class
     end
 
-    should 'fall back to en if a key is empty' do
+    should 'fall back if a key is empty' do
       info_hash_fr = JSON.parse(File.open(File.join(TARGET_DIR,'fr', 'text_ids.json'), "r"){ |f| f.read  })
       info_hash_us = JSON.parse(File.open(File.join(TARGET_DIR,'en', 'text_ids.json'), "r"){ |f| f.read  })
       assert_equal info_hash_us['sun_intro_step2'], info_hash_fr['sun_intro_step2']

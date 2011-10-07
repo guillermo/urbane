@@ -14,14 +14,22 @@ directory as JSON files. It uses the googles JSON api as opposed to the XML api.
 	spreadsheet_id = '0Amfbd9df0sdflkewsd09dsfkl328sdf02'
 	target_dir = '/tmp/translations'
 	file_name = 'text_ids.json'
-	languages = [:en, :de , :fr, :it, :tr, :es]
+	languages = {
+	  :english => 'en',
+	  :german => 'de',
+	  :french => 'fr',
+	  :italian => 'it',
+	  :turkish => 'tr',
+	  :spanish => 'es',
+	  :portuguese => 'pt'
+    }
 
 	Urbane::Generator.new({
 	  :spreadsheet_id => spreadsheet_id,
 	  :target_dir => target_dir,
 	  :file_name => file_name,
-	  :languages => languages,
-	  :fallback_language => :en
+      :languages => languages,
+      :fallback_language => :english
 	}).run
 
 ## How to find the google spreadsheet id
