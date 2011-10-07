@@ -42,7 +42,8 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
           :spanish => 'es',
           :portuguese => 'pt'
         },
-        :fallback_language => :english
+        :fallback_language => :english,
+        :format => :json
       }
    end
 
@@ -69,6 +70,15 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
       Urbane::Generator.new(@options).run
       info_hash_de = read_json_file(File.join('de', 'text_ids.json'))
       assert info_hash_de['sun_intro_step2'].include?('äÄö')
+    end
+
+    # How do I test this? JSON is a subset of YAML, so most JSON will actually
+    # be valid YAML
+    should 'support yaml output' do
+      @options[:format] = :yaml
+      @options[:file_name] = 'text_ids.yml'
+      Urbane::Generator.new(@options).run
+      assert YAML.load(read_file(File.join('en', 'text_ids.yml')));
     end
   end
 end

@@ -1,10 +1,16 @@
 require "urbane/version"
 require "urbane/vendor/ordered_hash"
 require "json"
+require "yaml"
 require "open-uri"
 
 module Urbane
   class Generator
+
+    GENERATORS = {
+      :json => lambda{|content| JSON.pretty_generate(content)},
+      :yaml => lambda{|content| content.to_yaml}
+    }
 
     def initialize(options)
       @target_dir = options[:target_dir]
@@ -13,6 +19,7 @@ module Urbane
       @language_locale_map = options[:languages]
       @languages = @language_locale_map.keys
       @fallback_language = options[:fallback_language]
+      @format = options[:format] || :json
     end
 
     def run
@@ -35,7 +42,7 @@ module Urbane
       @language_locale_map.each do |language, locale|
         `mkdir -p #{@target_dir}/#{locale}`
         File.open("#{@target_dir}/#{locale}/#{@file_name_for_translation_file}", 'w') do |f|
-          f.write JSON.pretty_generate(sorted_hash_for_language(language))
+          f.write GENERATORS[@format].call(sorted_hash_for_language(language))
         end
       end
     end
