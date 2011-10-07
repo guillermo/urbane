@@ -2,6 +2,7 @@ require "urbane/version"
 require "urbane/vendor/ordered_hash"
 require "json"
 require "yaml"
+require "nokogiri"
 require "open-uri"
 
 module Urbane
@@ -9,7 +10,18 @@ module Urbane
 
     GENERATORS = {
       :json => lambda{|content| JSON.pretty_generate(content)},
-      :yaml => lambda{|content| content.to_yaml}
+      :yaml => lambda{|content| content.to_yaml},
+      :xml  => lambda do |content|
+                  builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
+                    xml.send('resource-bundle', 'xmlns' => '',
+                                  'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance') do
+                      content.each do |key, translation|
+                        xml.resource(translation, 'key' => key)
+                      end
+                    end
+                  end
+                  builder.to_xml(:indent => 2,  :encoding => 'UTF-8')
+               end
     }
 
     def initialize(options)

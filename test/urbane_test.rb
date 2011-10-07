@@ -80,5 +80,12 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
       Urbane::Generator.new(@options).run
       assert YAML.load(read_file(File.join('en', 'text_ids.yml')));
     end
+
+    should 'support xml' do
+      @options[:format] = :xml
+      @options[:file_name] = 'text_ids.xml'
+      Urbane::Generator.new(@options).run
+      assert Nokogiri::XML(read_file(File.join('en', 'text_ids.xml')));
+    end
   end
 end
