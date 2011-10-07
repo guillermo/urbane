@@ -37,12 +37,7 @@ directory as JSON files. It uses the googles JSON api as opposed to the XML api.
 
 ## Output format
 
-For now it only supports JSON
-
-	{
-		"sun_intro_step2"=>"Build another one…",
-		"sun_intro_step3"=>"... and another one."
-	}
+Support for YAML, JSON and XML
 
 ## Output structure
 
