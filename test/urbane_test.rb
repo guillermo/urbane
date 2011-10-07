@@ -35,15 +35,14 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
         },
         :fallback_language => :english
       }
-      @generator = Urbane::Generator.new(@options)
-      @generator.run
-    end
+   end
 
     teardown do
       FileUtils.rm_rf(TARGET_DIR)
     end
 
     should 'create a folder and a document for each locale' do
+      generator = Urbane::Generator.new(@options).run
       @options[:languages].values.each do |locale|
         expected_file = File.join(TARGET_DIR, locale,'text_ids.json')
         assert File.exists?(expected_file), "file #{expected_file} should exist"
@@ -51,12 +50,14 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
     end
 
     should 'fall back if a key is empty' do
+      generator = Urbane::Generator.new(@options).run
       info_hash_fr = JSON.parse(File.open(File.join(TARGET_DIR,'fr', 'text_ids.json'), "r"){ |f| f.read  })
       info_hash_us = JSON.parse(File.open(File.join(TARGET_DIR,'en', 'text_ids.json'), "r"){ |f| f.read  })
       assert_equal info_hash_us['sun_intro_step2'], info_hash_fr['sun_intro_step2']
     end
 
     should 'handle special chars' do
+      generator = Urbane::Generator.new(@options).run
       info_hash_de = JSON.parse(File.open(File.join(TARGET_DIR,'de', 'text_ids.json'), "r"){ |f| f.read  })
       assert info_hash_de['sun_intro_step2'].include?('äÄö')
     end
