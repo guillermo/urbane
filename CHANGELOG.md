@@ -2,5 +2,6 @@
 
 ## v0.0.1
 
-* a first working version. Rough around the edges not many configurable
-  options
+The first working version. Rough around the edges. Assumes a certain
+structure of the google spreadsheet and only supports one output format
+in JSON.
