@@ -1,9 +1,18 @@
 # encoding: UTF-8
 require 'test_helper'
 
+FIXTURE_FILE_PATH = File.join('test', 'fixtures')
+TARGET_DIR = File.join('/tmp', 'translation_generator_test')
+
+def read_file(path)
+  File.open(File.join(TARGET_DIR, path), "r"){ |f| f.read  }
+end
+
+def read_json_file(path)
+  JSON.parse(read_file(path))
+end
+
 class Urbane::GeneratorTest < Test::Unit::TestCase
-  FIXTURE_FILE_PATH = File.join('test', 'fixtures')
-  TARGET_DIR = File.join('/tmp', 'translation_generator_test')
 
   context 'generator' do
     setup do
@@ -42,7 +51,7 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
     end
 
     should 'create a folder and a document for each locale' do
-      generator = Urbane::Generator.new(@options).run
+      Urbane::Generator.new(@options).run
       @options[:languages].values.each do |locale|
         expected_file = File.join(TARGET_DIR, locale,'text_ids.json')
         assert File.exists?(expected_file), "file #{expected_file} should exist"
@@ -50,15 +59,15 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
     end
 
     should 'fall back if a key is empty' do
-      generator = Urbane::Generator.new(@options).run
-      info_hash_fr = JSON.parse(File.open(File.join(TARGET_DIR,'fr', 'text_ids.json'), "r"){ |f| f.read  })
-      info_hash_us = JSON.parse(File.open(File.join(TARGET_DIR,'en', 'text_ids.json'), "r"){ |f| f.read  })
+      Urbane::Generator.new(@options).run
+      info_hash_fr = read_json_file(File.join('fr', 'text_ids.json'))
+      info_hash_us = read_json_file(File.join('en', 'text_ids.json'))
       assert_equal info_hash_us['sun_intro_step2'], info_hash_fr['sun_intro_step2']
     end
 
     should 'handle special chars' do
-      generator = Urbane::Generator.new(@options).run
-      info_hash_de = JSON.parse(File.open(File.join(TARGET_DIR,'de', 'text_ids.json'), "r"){ |f| f.read  })
+      Urbane::Generator.new(@options).run
+      info_hash_de = read_json_file(File.join('de', 'text_ids.json'))
       assert info_hash_de['sun_intro_step2'].include?('äÄö')
     end
   end
