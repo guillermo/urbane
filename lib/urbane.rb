@@ -34,7 +34,7 @@ module Urbane
       @language_locale_map.each do |language, locale|
         `mkdir -p #{@target_dir}/#{locale}`
         File.open("#{@target_dir}/#{locale}/#{@file_name_for_translation_file}", 'w') do |f|
-          f.write JSON.pretty_generate({:text_ids => sorted_hash_for_language(language)})
+          f.write JSON.pretty_generate(sorted_hash_for_language(language))
         end
       end
     end

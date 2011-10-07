@@ -50,11 +50,6 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
       end
     end
 
-    should 'have the key text_ids as a root node (we should probabely remove that)' do
-      info_hash_us = JSON.parse(File.open(File.join(TARGET_DIR,'en', 'text_ids.json'), "r"){ |f| f.read  })
-      assert_equal Hash,info_hash_us['text_ids'].class
-    end
-
     should 'fall back if a key is empty' do
       info_hash_fr = JSON.parse(File.open(File.join(TARGET_DIR,'fr', 'text_ids.json'), "r"){ |f| f.read  })
       info_hash_us = JSON.parse(File.open(File.join(TARGET_DIR,'en', 'text_ids.json'), "r"){ |f| f.read  })
@@ -63,7 +58,7 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
 
     should 'handle special chars' do
       info_hash_de = JSON.parse(File.open(File.join(TARGET_DIR,'de', 'text_ids.json'), "r"){ |f| f.read  })
-      assert info_hash_de['text_ids']['sun_intro_step2'].include?('äÄö')
+      assert info_hash_de['sun_intro_step2'].include?('äÄö')
     end
   end
 end
