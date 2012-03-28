@@ -87,5 +87,14 @@ class Urbane::GeneratorTest < Test::Unit::TestCase
       Urbane::Generator.new(@options).run
       assert Nokogiri::XML(read_file(File.join('en', 'text_ids.xml')));
     end
+
+    should 'support apples localization format' do
+      @options[:format] = :apple_strings
+      @options[:file_name] = 'text_ids.strings'
+      Urbane::Generator.new(@options).run
+      expected_first_line = '"sun_intro_step2" = "Build another one…";'
+      actual_first_line = read_file(File.join('en', 'text_ids.strings')).split("\n")[0]
+      assert_equal expected_first_line, actual_first_line
+    end
   end
 end

@@ -30,6 +30,7 @@ directory as JSON files. It uses the googles JSON api as opposed to the XML api.
 	Urbane::Generator.new({
 	  :spreadsheet_id => spreadsheet_id,
 	  :target_dir => target_dir,
+    :format => :json,
 	  :file_name => file_name,
       :languages => languages,
       :fallback_language => :english
@@ -37,7 +38,9 @@ directory as JSON files. It uses the googles JSON api as opposed to the XML api.
 
 ## Output format
 
-Support for YAML, JSON and XML
+Support for YAML, JSON, XML and Apple Strings Files
+
+  VALID_FORMATS = [:json, :yaml, :xml, :apple_strings]
 
 ## Output structure
 

@@ -21,7 +21,14 @@ module Urbane
                     end
                   end
                   builder.to_xml(:indent => 2,  :encoding => 'UTF-8')
-               end
+               end,
+      :apple_strings => lambda do |content|
+                          output = ""
+                          content.each do |key, translation|
+                            output << "\"#{key}\" = \"#{translation}\";\n"
+                          end
+                          output
+                        end
     }
 
     def initialize(options)
