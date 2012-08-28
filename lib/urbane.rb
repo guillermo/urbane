@@ -25,6 +25,7 @@ module Urbane
       :apple_strings => lambda do |content|
                           output = ""
                           content.each do |key, translation|
+                            translation.gsub!('"','\"')
                             output << "\"#{key}\" = \"#{translation}\";\n"
                           end
                           output
